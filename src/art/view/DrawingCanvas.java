@@ -3,6 +3,7 @@ package art.view;
 import java.awt.Dimension;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -36,4 +37,12 @@ public class DrawingCanvas extends JPanel
 		this.setPreferredSize(new Dimension(600,600));
 		this.setMaximumSize(getPreferredSize());
 	}
+	
+	public void addShape(Shape current) {}
+	public void clear() {}
+	public void changeBackground() {}
+	public void save() {}
+	private Color randomColor() {}
+	private void updateImage() {}
+	protected void paintComponent(Graphics graphics) {}
 }
