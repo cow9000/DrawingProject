@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.Hashtable;
 
@@ -13,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SpringLayout;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import art.controller.Controller;
 
@@ -125,6 +129,47 @@ public class ArtPanel extends JPanel
 	}
 	
 	private void setupListeners() {
+		rectangleButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent click) {
+				Rectangle rectangle = createRectangle();
+				canvas.addShape(rectangle);
+			}
+		});
+		
+		triangleButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent click) {
+				Polygon triangle = createPolygon(3);
+				canvas.addShape(triangle);
+			}
+		});
+		
+		ellipseButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent click) {
+				Ellipse2D ellipse = createEllipse();
+				canvas.addShape(ellipse);
+			}
+		});
+		
+		polygonButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent click) {
+				Polygon polygon = createPolygon(currentEdgeCount);
+				canvas.addShape(polygon);
+			}
+		});
+		
+		clearButton.addActionListener(click->canvas.clear());
+		saveButton.addActionListener(click->canvas.save());
+		colorButton.addActionListener(click->canvas.changeBackground());
+		scaleSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(!scaleSlider.getValueIsAdjusting()) {
+					currentScale = scaleSlider.getValue();
+				}
+			}
+		});
+		
+		
 		
 	}
 	
@@ -167,6 +212,22 @@ public class ArtPanel extends JPanel
 	}
 	
 	private Ellipse2D createEllipse() {
+		Ellipse2D ellipse = new Ellipse2D.Double();
+		
+		
+		int cornerX = (int) (Math.random() * 600);
+		int cornerY = (int) (Math.random() * 600);
+		
+		double width = Math.random() * currentScale + 1;
+		
+		if(coinFlip()) {
+			ellipse.setFrame(cornerX, cornerY, width, width);
+		}else {
+			double height = Math.random() * currentScale + 1;
+			ellipse.setFrame(cornerX, cornerY, width, height);
+		}
+		
+		return ellipse;
 		
 	}
 	
