@@ -1,6 +1,8 @@
 package art.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -44,5 +46,8 @@ public class DrawingCanvas extends JPanel
 	public void save() {}
 	private Color randomColor() {}
 	private void updateImage() {}
-	protected void paintComponent(Graphics graphics) {}
+	protected void paintComponent(Graphics graphics) {
+		super.paintComponent(graphics);
+		graphics.drawImage(canvasImage, 0, 0, null);
+	}
 }
