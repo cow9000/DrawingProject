@@ -1,15 +1,21 @@
 package art.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import art.controller.Controller;
@@ -56,11 +62,71 @@ public class DrawingCanvas extends JPanel
 		updateImage();
 	}
 	
-	public void clear() {}
-	public void changeBackground() {}
-	public void save() {}
-	private Color randomColor() {}
-	private void updateImage() {}
+	public void clear() {
+		canvasImage = new BufferedImage(600,600, BufferedImage.TYPE_INT_ARGB);
+		ellipseList.clear();
+		triangleList.clear();
+		polygonList.clear();
+		rectangleList.clear();
+		updateImage();
+	}
+	public void changeBackground() {
+		Graphics2D current = canvasImage.createGraphics();
+		current.setPaint(randomColor());
+		current.fillRect(0, 0, canvasImage.getWidth(), canvasImage.getHeight());
+		updateImage();
+	}
+	public void save() {
+		try {
+			JFileChooser saveDialog = new JFileChooser();
+			saveDialog.showSaveDialog(app.getFrame());
+			String savePath = saveDialog.getSelectedFile().getPath();
+			ImageIO.write(canvasImage, "PNG", new File(savePath));
+		}catch(IOException error) {
+			app.handleErrors(error);
+		}
+	}
+	private Color randomColor() {
+		
+		int red = (int) (Math.random() * 256);
+		int blue = (int) (Math.random() * 256);
+		int green  = (int) (Math.random() * 256);
+		int alpha = (int) (Math.random() * 256);
+		
+		return new Color(red,green,blue,alpha);
+		
+	}
+	private void updateImage() {
+		
+		Graphics2D currentGraphics = (Graphics2D) canvasImage.getGraphics();
+		for(Ellipse2D current : ellipseList) {
+			currentGraphics.setColor(randomColor());
+			currentGraphics.setStroke(new BasicStroke(2));
+			currentGraphics.fill(current);
+			currentGraphics.setColor(randomColor());
+			currentGraphics.draw(current);
+		}
+		
+		for(Polygon currentTriangle : triangleList) {
+			currentGraphics.setColor(randomColor());
+			currentGraphics.fill(currentTriangle);
+		}
+		
+		for(Polygon currentPolygon : polygonList) {
+			currentGraphics.setColor(randomColor());
+			currentGraphics.setStroke(new BasicStroke(4));
+			currentGraphics.draw(currentPolygon);
+		}
+		
+		for(Rectangle currentRectangle : rectangleList) {
+			currentGraphics.setColor(randomColor());
+			currentGraphics.fill(currentRectangle);
+		}
+		
+		currentGraphics.dispose();
+		repaint();
+		
+	}
 	protected void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		graphics.drawImage(canvasImage, 0, 0, null);
