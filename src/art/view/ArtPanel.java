@@ -160,6 +160,16 @@ public class ArtPanel extends JPanel
 		clearButton.addActionListener(click->canvas.clear());
 		saveButton.addActionListener(click->canvas.save());
 		colorButton.addActionListener(click->canvas.changeBackground());
+		
+		edgeSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(!edgeSlider.getValueIsAdjusting()) {
+					currentScale = edgeSlider.getValue();
+				}
+			}
+		});
+		
 		scaleSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
